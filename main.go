@@ -1,22 +1,18 @@
 package main
 
 import (
-	"embed"
 	"log"
 	"net/http"
 
 	r "github.com/tolma-ch/tolmach-go/routes"
 )
 
-//go:embed swagger-ui
-var swaggerUIdir embed.FS
-
 func main() {
-	router, f := r.MainRouter(swaggerUIdir)
+	router := r.MainRouter()
 
 	srv := &http.Server{
 		Addr:    "localhost:8000",
-		Handler: f,
+		Handler: router,
 	}
 	err := srv.ListenAndServe()
 	if err != nil {

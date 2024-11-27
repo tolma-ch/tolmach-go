@@ -1,8 +1,8 @@
-package controller
+package controllers
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,14 +23,14 @@ type getTaskInput struct {
 }
 
 // Handler for /task/:id GET
-func GetTask(c *gin.Context, input *getTaskInput) (*Task, error) {
+func GetTask(c *gin.Context) {
+	param, _ := strconv.Atoi(c.Param("id"))
 	for id, task := range taskStore {
-		if id == input.Id {
-			return &task, nil
+		if id == param {
+			c.JSON(http.StatusOK, task)
 		}
 	}
 
 	// Task not found
 	c.AbortWithStatus(http.StatusNotFound)
-	return nil, fmt.Errorf("task id=%d not found", input.Id)
 }
