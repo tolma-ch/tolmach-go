@@ -1,0 +1,42 @@
+definitions:
+  user.LoginInputData:
+    properties:
+      password:
+        example: pass
+        type: string
+      username:
+        example: username
+        type: string
+    type: object
+  user.LoginOutputData:
+    properties:
+      token:
+        example: gadsgasfdasfds
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user based on provided `username` and `password`
+      parameters:
+      - description: name search by q
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/user.LoginInputData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.LoginOutputData'
+      summary: Login user
+      tags:
+      - User
+swagger: "2.0"
