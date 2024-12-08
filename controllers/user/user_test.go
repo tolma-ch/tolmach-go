@@ -1,4 +1,4 @@
-package main
+package user
 
 import (
 	"encoding/json"
@@ -8,14 +8,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"github.com/tolma-ch/tolmach-go/controllers/user"
-	"github.com/tolma-ch/tolmach-go/routes"
 )
 
 func TestLogin(t *testing.T) {
-	router := routes.MainRouter()
-	authData := user.LoginInputData{
+	router := UserRouter(gin.Default())
+	authData := LoginInputData{
 		Username: "foo",
 		Password: "bar",
 	}
@@ -33,7 +32,7 @@ func TestLogin(t *testing.T) {
 
 	assert.Equal(t, 401, w.Code)
 
-	authData = user.LoginInputData{
+	authData = LoginInputData{
 		Username: "admin",
 		Password: "password",
 	}

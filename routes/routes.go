@@ -16,7 +16,7 @@ func MainRouter() *gin.Engine {
 	r.GET("/task/:id", mw.AuthMiddleware(), cont.GetTask)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	r.POST("/login", user.Login)
+	user.UserRouter(r)
 
 	return r
 }
