@@ -10,12 +10,16 @@ import (
 )
 
 type LoginInputData struct {
-	Username string `example:"username"`
-	Password string `example:"pass"`
+	Username string `example:"username" json:"username"`
+	Password string `example:"pass" json:"password"`
 }
 
 type LoginOutputData struct {
-	Token string `example:"gadsgasfdasfds"`
+	Token string `example:"gadsgasfdasfds" json:"token"`
+}
+
+type LoginErrorData struct {
+	Error string `example:"Invalid credentials" json:"error"`
 }
 
 // @Summary Login user
@@ -26,6 +30,8 @@ type LoginOutputData struct {
 // @Produce json
 // @Param form body LoginInputData true "name search by q"
 // @Success 200 {object} LoginOutputData
+// @Failure 401 {object} LoginErrorData
+// @Failure 500 {object} LoginErrorData
 // @Router /login [post]
 func Login(c *gin.Context) {
 	// In a real application, authenticate the user (this is just an example)
@@ -43,7 +49,7 @@ func Login(c *gin.Context) {
 	} else if data.Username == "user" && data.Password == "password" {
 		role = "user"
 	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		c.JSON(http.StatusUnauthorized, LoginErrorData{Error: "Invalid credentials"})
 		return
 	}
 
@@ -57,7 +63,7 @@ func Login(c *gin.Context) {
 	// Sign and get the complete encoded token as a string
 	tokenString, err := token.SignedString([]byte(mw.SecretKey))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		c.JSON(http.StatusInternalServerError, LoginErrorData{Error: "Failed to create token"})
 	}
 
 	c.JSON(http.StatusOK, LoginOutputData{Token: tokenString})

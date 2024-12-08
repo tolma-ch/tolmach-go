@@ -1,43 +1,52 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/tolma-ch/tolmach-go/controllers/user"
 	"github.com/tolma-ch/tolmach-go/routes"
 )
 
 func TestLogin(t *testing.T) {
 	router := routes.MainRouter()
-	data := url.Values{}
-	data.Set("username", "foo")
-	data.Set("password", "bar")
+	authData := user.LoginInputData{
+		Username: "foo",
+		Password: "bar",
+	}
+
+	authDataJson, _ := json.Marshal(authData)
 
 	w := httptest.NewRecorder()
 
-	// userJson, _ := json.Marshal(map[string]string{"username": "", "password": ""})
-	req, err := http.NewRequest("POST", "/login", strings.NewReader(data.Encode()))
+	req, err := http.NewRequest("POST", "/login", strings.NewReader(string(authDataJson)))
 	if err != nil {
 		fmt.Println(err)
 	}
+	req.Header.Set("Content-Type", "application/json")
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, 401, w.Code)
 
-	// correctUserJson, _ := json.Marshal(map[string]string{"username": "admin", "password": "password"})
-	data.Set("username", "admin")
-	data.Set("password", "password")
+	authData = user.LoginInputData{
+		Username: "admin",
+		Password: "password",
+	}
+
+	authDataJson, _ = json.Marshal(authData)
+
 	w = httptest.NewRecorder()
-	req, err = http.NewRequest("POST", "/login", strings.NewReader(data.Encode()))
+
+	req, err = http.NewRequest("POST", "/login", strings.NewReader(string(authDataJson)))
 	if err != nil {
 		fmt.Println(err)
 	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/json")
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 200, w.Code)
 

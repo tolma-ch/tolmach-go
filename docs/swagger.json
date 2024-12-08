@@ -34,12 +34,33 @@
                         "schema": {
                             "$ref": "#/definitions/user.LoginOutputData"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/user.LoginErrorData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/user.LoginErrorData"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
+        "user.LoginErrorData": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Invalid credentials"
+                }
+            }
+        },
         "user.LoginInputData": {
             "type": "object",
             "properties": {

@@ -1,4 +1,10 @@
 definitions:
+  user.LoginErrorData:
+    properties:
+      error:
+        example: Invalid credentials
+        type: string
+    type: object
   user.LoginInputData:
     properties:
       password:
@@ -36,6 +42,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.LoginOutputData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/user.LoginErrorData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/user.LoginErrorData'
       summary: Login user
       tags:
       - User
