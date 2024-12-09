@@ -19,5 +19,5 @@ func main() {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 
-	router.Run("localhost:8000")
+	router.Run("0.0.0.0:8000")
 }

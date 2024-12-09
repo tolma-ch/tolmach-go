@@ -9,19 +9,6 @@ import (
 	mw "github.com/tolma-ch/tolmach-go/middleware"
 )
 
-type LoginInputData struct {
-	Username string `example:"username" json:"username"`
-	Password string `example:"pass" json:"password"`
-}
-
-type LoginOutputData struct {
-	Token string `example:"gadsgasfdasfds" json:"token"`
-}
-
-type LoginErrorData struct {
-	Error string `example:"Invalid credentials" json:"error"`
-}
-
 // @Summary Login user
 // @Schemes
 // @Description Login user based on provided `username` and `password`
@@ -34,7 +21,6 @@ type LoginErrorData struct {
 // @Failure 500 {object} LoginErrorData
 // @Router /login [post]
 func Login(c *gin.Context) {
-	// In a real application, authenticate the user (this is just an example)
 	data := LoginInputData{}
 
 	if err := c.ShouldBind(&data); err != nil {
@@ -69,8 +55,17 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, LoginOutputData{Token: tokenString})
 }
 
-func handleAdminResource(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Admin resource accessed successfully",
-	})
+// @Summary Login register
+// @Schemes
+// @Description Login registration based on provided `email` and `password`
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param form body LoginInputData true "name search by q"
+// @Success 200 {object} LoginOutputData
+// @Failure 401 {object} LoginErrorData
+// @Failure 500 {object} LoginErrorData
+// @Router /login [post]
+func Register(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "success"})
 }

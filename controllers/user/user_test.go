@@ -1,15 +1,11 @@
 package user
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"github.com/tolma-ch/tolmach-go/helpers"
 )
 
 func TestLogin(t *testing.T) {
@@ -19,34 +15,16 @@ func TestLogin(t *testing.T) {
 		Password: "bar",
 	}
 
-	authDataJson, _ := json.Marshal(authData)
+	return_code := helpers.JsonPOSTTest(router, "/login", authData)
 
-	w := httptest.NewRecorder()
-
-	req, err := http.NewRequest("POST", "/login", strings.NewReader(string(authDataJson)))
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-	router.ServeHTTP(w, req)
-
-	assert.Equal(t, 401, w.Code)
+	assert.Equal(t, 401, return_code)
 
 	authData = LoginInputData{
 		Username: "admin",
 		Password: "password",
 	}
 
-	authDataJson, _ = json.Marshal(authData)
-
-	w = httptest.NewRecorder()
-
-	req, err = http.NewRequest("POST", "/login", strings.NewReader(string(authDataJson)))
-	if err != nil {
-		fmt.Println(err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-	router.ServeHTTP(w, req)
-	assert.Equal(t, 200, w.Code)
+	return_code = helpers.JsonPOSTTest(router, "/login", authData)
+	assert.Equal(t, 200, return_code)
 
 }
