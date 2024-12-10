@@ -4,20 +4,21 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/joho/godotenv"
 	r "github.com/tolma-ch/tolmach-go/routes"
 )
 
 func main() {
-	router := r.MainRouter()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
+	router := r.MainRouter()
 	srv := &http.Server{
-		Addr:    "localhost:8000",
+		Addr:    "0.0.0.0:8000",
 		Handler: router,
 	}
-	err := srv.ListenAndServe()
-	if err != nil {
+	if err := srv.ListenAndServe(); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
-
-	router.Run("0.0.0.0:8000")
 }
